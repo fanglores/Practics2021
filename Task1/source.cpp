@@ -60,7 +60,7 @@ bool testlRoundShiftMas()
 	lRoundShiftMas(tmas3, 5, 10);
 	bool f3 = CompareMas(tmas3, amas3, 10);
 
-	return (f1 && f2 & f3);
+	return (f1 && f2 && f3);
 }
 
 
