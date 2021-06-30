@@ -1,88 +1,41 @@
 #include <iostream>
+using namespace std;
 
-struct Node {
+struct Node 
+{
   int val;
   Node* next;
 };
 
-// Инициализации элемента односвязного списка нулями
-
-void init(Node* node) {
-
-}
-
-// Отображения односвязного списка на экран
-void show(Node* head) {
+// РРЅРёС†РёР°Р»РёР·Р°С†РёРё СЌР»РµРјРµРЅС‚Р° РѕРґРЅРѕСЃРІСЏР·РЅРѕРіРѕ СЃРїРёСЃРєР° РЅСѓР»СЏРјРё
+void init(Node* node) 
+{
 
 }
 
-// Добавления элемента в односвязный список
-void pushNode(Node* head,Node* node) {
+// РћС‚РѕР±СЂР°Р¶РµРЅРёСЏ РѕРґРЅРѕСЃРІСЏР·РЅРѕРіРѕ СЃРїРёСЃРєР° РЅР° СЌРєСЂР°РЅ
+void show(Node* root) 
+{
+
+}
+
+// Р”РѕР±Р°РІР»РµРЅРёСЏ СЌР»РµРјРµРЅС‚Р° РІ РѕРґРЅРѕСЃРІСЏР·РЅС‹Р№ СЃРїРёСЃРѕРє
+void pushNode(Node* root, Node* node) 
+{
 
 } 
 
 
-// Написать функцию инициализации size элементов списка заданным значением val.
-void initList(Node* head, int size, int val)  {
 
-}
-
-// Написать функцию копирования элементов массива source в новый массив dest
-void copyMas(Node* source, Node* dest) {
-
-}
-  
-
-// Написать функцию сравнение списков source и dest. Если списки равны 0, если не равны -1
-int compareMas(Node* source, Node* dest) {
-  return 0;
-}
-
-
-// Написать функцию удаления со сдвигом влево n-го элемента списка.
-void deleteList(Node* head,int n) {
-
-}
-
-
-// Написать функцию сдвига значений вправо на n-элементов с заполнением крайних элементов нулями
-void rShiftList(Node* head,int n) {
+//РќР°РїРёСЃР°С‚СЊ С„СѓРЅРєС†РёСЋ СЃРґРІРёРіР° Р·РЅР°С‡РµРЅРёР№ РІР»РµРІРѕ РЅР° n-СЌР»РµРјРµРЅС‚РѕРІ СЃ РїРµСЂРµРЅРѕСЃРѕРј РІС‹С‚РµСЃРЅРµРЅРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ РІ РєРѕРЅРµС†
+void lRoundShiftNode(Node* root, int n, int size) 
+{
 
 }
 
 
 
-// Написать функцию сдвига значений влево на n-элементов с заполнением крайних элементов нулями.
-void lShiftList(Node* head,int n) {
-
-}
-
-
-//Написать функцию сдвига значений влево на n-элементов с переносом вытесненных элементов в конец
-void lRoundShiftMas(Node* head,int n, int size) {
-
-}
-
-
-// Написать функцию вычисления среднего значения элементов списка.
-int averageList(Node* head, int size) {
-  return 0;
-}
-
-
-
-// Написать функцию вычисления средне квадратического отклонения элементов списка.
-int skoFromList(Node* head, int size) {
-  return 0;
-}
-
-
-int testSkoFromList() {
-  return -1;
-}
-
-
-static void runTest(int (*testFunction)(),const std::string& testName)
+static void runTest(int (*testFunction)(),const string& testName)
 {
   if(testFunction()==0)
     std::cout << "Test "<< testName << " - OK" << std::endl;
@@ -92,8 +45,9 @@ static void runTest(int (*testFunction)(),const std::string& testName)
 
 
 
-int main() {
-  runTest(testSkoFromList,"testSkoFromList");
+int main() 
+{
+  runTest(testlRoundShiftNode,"testSkoFromList");
 
 
 }
