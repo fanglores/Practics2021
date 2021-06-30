@@ -49,7 +49,7 @@ bool CompareMas(int* a, int* b, int size)
 // Написать функцию сдвига влево на n-элементов с переносом вытесненных элементов в конец
 int testlRoundShiftMas() 
 {
-  int tmas1[5] = {1,2,3,4,5};
+ 	int tmas1[5] = {1,2,3,4,5};
 	int amas1[5] = {4,5,1,2,3};
 	lRoundShiftMas(tmas1, 3, 5);	
 	bool f1 = CompareMas(tmas1, amas1, 5);
