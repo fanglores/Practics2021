@@ -16,7 +16,7 @@ using namespace std;
 Тесты
 */
 
-const double g = 9.806650000000001;
+const double g = 9.80665;
 
 struct DataList
 {
