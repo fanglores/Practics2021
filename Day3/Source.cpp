@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 /*
@@ -114,18 +115,22 @@ DataList* simulate(double h, double v, double dt)
 
 void print(DataList* ls, double t)
 {
+	cout << "Printing data sheet..." << endl;
+	cout << "Time\tHeight\tVelocity\tAcceleration" << endl;
+
 	DataList* cur_dl = ls;
-	while (cur_dl->next != NULL && cur_dl->t < t)
+	while (cur_dl->next != NULL && cur_dl->t <= t)
 	{
-
-
+		cout << fixed << showpoint;
+		cout << setprecision(2);
+		cout << (double)cur_dl->t << "\t" << cur_dl->h << "\t" << cur_dl->v << "\t\t" << cur_dl->a << endl;
+		cur_dl = cur_dl->next;
 	}
 
 }
 
 int main()
 {
-	
-	DataList* dl = simulate(g, 2 * g, 1);
-	print(dl, );
+	DataList* dl = simulate(g, 2 * g, 1.0);
+	print(dl, 100);
 }
