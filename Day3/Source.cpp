@@ -16,7 +16,7 @@ using namespace std;
 Тесты
 */
 
-const double g = 9.80665;
+const double g = 9.806650000000001;
 
 struct DataList
 {
@@ -33,7 +33,7 @@ void initList(DataList* root)
 	root->next = NULL;
 }
 
-void write(DataList* ls, double h, double v, double a, double t)
+void writeList(DataList* ls, double h, double v, double a, double t)
 {
 	DataList* ls_end = ls;
 	while (ls_end->next != NULL)
@@ -64,7 +64,7 @@ DataList* simulate(double h, double v, double dt)
 		apogee_h = h + dh;
 		touch_t = sqrt(2 * apogee_h / a);
 
-		write(output, h, v, -g, 0);
+		writeList(output, h, v, -g, 0);
 	}
 	else	
 	{
@@ -74,7 +74,7 @@ DataList* simulate(double h, double v, double dt)
 		touch_t = (-abs(v) + sqrt(v * v + 2 * a * h)) / a;
 		
 
-		write(output, h, v, g, 0);
+		writeList(output, h, v, g, 0);
 	}
 
 	double ct = dt;
@@ -83,33 +83,26 @@ DataList* simulate(double h, double v, double dt)
 	{
 		h += v * dt - a * dt * dt / 2;
 		v -= a * dt;
-		write(output, h, v, -g, ct);
+		writeList(output, h, v, -g, ct);
 		ct += dt;
 	}
 	//обновляем параметры (тк в следующий момент dt шарик уже мог опуститься)
 	v = a * (ct - apogee_t); 
 	h = apogee_h - a * (ct - apogee_t) * (ct - apogee_t) / 2;
-	write(output, h, -v, g, ct);
+	writeList(output, h, -v, -g, ct);
 	ct += dt;
 	//рассматриваем состояния dt во время движения вниз и записываем в DataList
 	while (ct < apogee_t + touch_t)
 	{
 		h -= v * dt + a * dt * dt / 2;
 		v += a * dt;
-		write(output, h, -v, g, ct);
+		writeList(output, h, -v, -g, ct);
 		ct += dt;
 	}
 
-	write(output, 0, 0, 0, ct);
+	writeList(output, 0, 0, 0, ct);
 	cout << "Simulation has been stopped due to changeless environment" << endl;
-/*
-	//рассматриваем состояния dt после падения и записываем в DataList
-	if (ct <= apogee_t + touch_t)
-	{
-		write(output, 0, 0, 0, ct + dt);
-		cout << "Simulation stopped due to changeless environment" << endl;
-	}
-*/
+
 	return output;
 }
 
@@ -126,11 +119,81 @@ void print(DataList* ls, double t)
 		cout << (double)cur_dl->t << "\t" << cur_dl->h << "\t" << cur_dl->v << "\t\t" << cur_dl->a << endl;
 		cur_dl = cur_dl->next;
 	}
+}
 
+bool testDataListInit()
+{
+	DataList* tmp = new DataList;
+	initList(tmp);
+	tmp->next = new DataList;
+	initList(tmp->next);
+	if (tmp->a == 0 && tmp->next != NULL)
+		if (tmp->next->a == 0 && tmp->next->next == NULL) 
+			return true;
+
+	return false;
+}
+
+bool testDataListWrite()
+{
+	DataList* tmp = new DataList;
+	initList(tmp);
+
+	writeList(tmp, 1.2345, 1, 1, 0.000001);
+	writeList(tmp->next, -1, 1000, -1.09876, 1);
+
+	if (tmp->h == 1.2345 && tmp->t == 0.000001)
+		if (tmp->next->a == -1.09876 && tmp->next->v == 1000)
+			return true;
+	
+	return false;
+}
+
+bool testSimulate()
+{
+	DataList* out = simulate(g, 2 * g, 1.0);
+
+	if (out->h - g < 0.001 && out->a == -g && out->v == 2 * g && out->t == 0)	//t = 0
+	{
+		out = out->next;
+		if (out->h - 2.5 * g < 0.001 && out->a == -g && out->v == g && out->t == 1)	//t = 1
+		{
+			out = out->next;
+			if (out->h - 3.0 * g < 0.001 && out->a == -g && out->v == 0 && out->t == 2)	//t = 2
+			{
+				out = out->next;
+				if (out->h - 2.5 * g < 0.001 && out->a == -g && out->v == -g && out->t == 3)	//t = 3
+				{
+					out = out->next;
+					if (out->h - g < 0.001 && out->a == -g && out->v == -2 * g && out->t == 4)	//t = 4
+					{
+						out = out->next;
+						if (out->h == 0 && out->a == 0 && out->v == 0 && out->t == 5)	//t = 5
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+void runTest(bool (*testFunction)(), const string& testName)
+{
+	if (testFunction() == true)
+		std::cout << "Test " << testName << " - OK" << std::endl;
+	else
+		std::cout << "Test " << testName << " - FAIL" << std::endl;
 }
 
 int main()
 {
-	DataList* dl = simulate(g, 2 * g, 1.0);
-	print(dl, 100);
+	runTest(testDataListInit, "DataListInit");
+	runTest(testDataListWrite, "DataListWrite");
+	runTest(testSimulate, "Simulation");
+	//DataList* dl = simulate(g, 2 * g, 1.0);
+	//print(dl, 100);
 }
