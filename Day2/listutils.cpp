@@ -1,22 +1,23 @@
 #include <iostream>
 using namespace std;
 
-struct Node 
+struct Node
 {
-  int val;
-  Node* next = NULL;
+	int val;
+	Node* next;
 };
 
 // Инициализации элемента односвязного списка нулями
 void init(Node* node)
 {
 	node->val = 0;
+	node->next = NULL;
 }
 
 // Отображения односвязного списка на экран
-void show(Node* root) 
+void show(Node* root)
 {
-  Node* cur = root;
+	Node* cur = root;
 	while (cur->next != NULL)
 	{
 		cout << cur->val << " ";
@@ -26,68 +27,80 @@ void show(Node* root)
 }
 
 // Добавления элемента в односвязный список
-void pushNode(Node* root, Node* node) 
+void pushNode(Node* root, Node* node)
 {
-  Node* cur = root;
-	while (cur->next != NULL) cur = cur->next;
+	Node* cur = root;
+	while (cur->next != NULL) 
+		cur = cur->next;
 
 	cur->next = new Node;
+	init(cur->next);
 	cur->val = node->val;
-} 
-
-
+}
 
 //Написать функцию сдвига значений влево на n-элементов с переносом вытесненных элементов в конец
-void lRoundShiftNode(Node* root, int n, int size) 
+void lRoundShiftNode(Node* root, int n)
 {
-  for (int i = 0; i < n; i++)
+	for (int i = 0; i < n; i++)
 	{
 		Node* cur = root;
 		int num = cur->val;
+
 		while (cur->next->next != NULL)
 		{
 			cur->val = cur->next->val;
 			cur = cur->next;
 		}
+
 		cur->val = num;
 	}
 }
 
-int testFunction()
+//push test
+bool testPushNode()
 {
-  Node* root = new Node;
-  
-	//push test
+	Node* root = new Node;
+
+	init(root);
 	pushNode(root, new Node{ 1 });
 	pushNode(root, new Node{ 2 });
-	bool f1 = (root->next->val == 2 && root->val == 1);
+	return (root->next->val == 2 && root->val == 1);
+}
 
-	//init test
-	init(root->next);
-	bool f2 = (root->next->val == 0);
+bool testInitNode()
+{
+	Node* root = new Node;
 
-	//round shift test
-	root->next->val = 2;
+	init(root);
+	return (root->val == 0);
+
+}
+
+bool testlRoundShiftNode()
+{
+	Node* root = new Node;
+
+	init(root);
+	pushNode(root, new Node{ 1 });
+	pushNode(root, new Node{ 2 });
 	pushNode(root, new Node{ 3 });
 	pushNode(root, new Node{ 4 });
 	lRoundShiftNode(root, 3);
-	bool f3 = (root->val == 4 && root->next->val == 1 
-		&& root->next->next->val == 2 && root->next->next->next->val == 3);
+	return (root->val == 4 && root->next->val == 1 && root->next->next->val == 2 && root->next->next->next->val == 3);
 
-	return ((f1 && f2 && f3)? 0 : -1);
 }
 
-
-
-static void runTest(int (*testFunction)(),const string& testName)
+static void runTest(bool (*testFunction)(), const string& testName)
 {
-  if(testFunction()==0)
-    std::cout << "Test "<< testName << " - OK" << std::endl;
-  else 
-    std::cout << "Test "<< testName << " - FAIL" << std::endl;
+	if (testFunction() == 1)
+		std::cout << "Test " << testName << " - OK" << std::endl;
+	else
+		std::cout << "Test " << testName << " - FAIL" << std::endl;
 }
 
-int main() 
+int main()
 {
-  runTest(testlRoundShiftNode,"testSkoFromList");
+	runTest(testInitNode, "Init test");
+	runTest(testPushNode, "Push test");
+	runTest(testlRoundShiftNode, "lRoundShiftTest");
 }
