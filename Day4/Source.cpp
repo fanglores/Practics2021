@@ -46,6 +46,7 @@ void createImage(Image* img, int tmx, int tmy)
 	img->mx = tmx;
 	img->my = tmy;
 	img->pixels = new int[(tmy * tmx)]{ 0 };
+	//пробовал использовать промежуточный массив, помогло, ошибка на 48 строке не появляется, но появляется на строке 68
 }
 
 void setPointImage(Image* img, int x, int y, int color)
@@ -92,7 +93,7 @@ bool testCreateImage()
 
 	if (im->pixels[0] == 0 && im->pixels[9] == 0 && im->mx == 2 && im->my == 5)
 		return true;
-
+	//пробовал писать delete im
 	return false;
 }
 
@@ -104,7 +105,7 @@ bool testGetPointImage()
 
 	if (getPointImage(im, 1, 4) == 255 && getPointImage(im, 1, 2) == 0)
 		return true;
-
+	//пробовал писать delete im
 	return false;
 }
 
@@ -118,7 +119,7 @@ bool testSetPointImage()
 	if (getPointImage(im, 1, 3) == 127 && getPointImage(im, 2, 5) == 255)
 		return true;
 	
-	//пробовал писать delete
+	//пробовал писать delete im
 	return false;
 }
 
