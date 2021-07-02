@@ -27,21 +27,7 @@ void saveToPnmFile(Image* img, string fileName);
 struct Image {
 	int mx = 0;
 	int my = 0;
-	int* pixels;
-	/*
-	Image(int tmx, int tmy)
-	{
-		mx = tmx;
-		my = tmy;
-		pixels = new int[mx * my + 1];
-	}
-	
-	~Image()
-	{
-		delete []pixels;
-	}
-	*/
-	
+	int* pixels;	
 };
 
 void createImage(Image* img, int tmx, int tmy)
