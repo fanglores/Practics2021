@@ -23,10 +23,9 @@ void saveToPnmFile(Image* img, string fileName);
 */
 
 struct Image {
-	int mx;
-	int my;
+	int mx = 0;
+	int my = 0;
 	int* pixels;
-	
 	/*
 	Image(int tmx, int tmy)
 	{
@@ -34,19 +33,20 @@ struct Image {
 		my = tmy;
 		pixels = new int[mx * my + 1];
 	}
+	
 	~Image()
 	{
-		delete pixels;
+		delete []pixels;
 	}
 	*/
+	
 };
 
 void createImage(Image* img, int tmx, int tmy)
 {
 	img->mx = tmx;
 	img->my = tmy;
-	img->pixels = new int[(tmy * tmx)]{ 0 };
-	//пробовал использовать промежуточный массив, помогло, ошибка на 48 строке не появляется, но появляется на строке 68
+	img->pixels = new int[tmx * tmy]{ 0 };
 }
 
 void setPointImage(Image* img, int x, int y, int color)
@@ -71,7 +71,6 @@ void showImage(Image* img)
 		cout << endl;
 	}
 }
-
 /*
 void saveImage(Image* img, char& filename)
 {
@@ -93,7 +92,7 @@ bool testCreateImage()
 
 	if (im->pixels[0] == 0 && im->pixels[9] == 0 && im->mx == 2 && im->my == 5)
 		return true;
-	//пробовал писать delete im
+
 	return false;
 }
 
@@ -105,7 +104,7 @@ bool testGetPointImage()
 
 	if (getPointImage(im, 1, 4) == 255 && getPointImage(im, 1, 2) == 0)
 		return true;
-	//пробовал писать delete im
+
 	return false;
 }
 
@@ -113,19 +112,18 @@ bool testSetPointImage()
 {
 	Image* im = new Image;
 	createImage(im, 2, 5);
-	setPointImage(im, 1, 3, 127);
-	setPointImage(im, 2, 5, 255);
+	setPointImage(im, 1, 0, 127);
+	setPointImage(im, 1, 4, 255);
 
-	if (getPointImage(im, 1, 3) == 127 && getPointImage(im, 2, 5) == 255)
+	if (getPointImage(im, 1, 0) == 127 && getPointImage(im, 1, 4) == 255)
 		return true;
 	
-	//пробовал писать delete im
 	return false;
 }
 
 bool testSaveImage()
 {
-	//заглушка
+
 
 	return false;
 }
@@ -145,7 +143,7 @@ int main()
 	runTest(testSetPointImage, "SetPointImage");
 
 	Image* img_ptr = new Image;
-	createImage(img_ptr, 3, 5);
+	createImage(img_ptr, 3, 3);
 	setPointImage(img_ptr, 0, 0, 1);
 	setPointImage(img_ptr, 1, 1, 1);
 	setPointImage(img_ptr, 2, 2, 1);
