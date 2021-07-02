@@ -130,21 +130,6 @@ bool testSetPointImage()
 	return false;
 }
 
-bool testSaveImage()
-{
-	fstream in;
-	in.open("hello_image.pnm");
-
-	string str;
-	while (getline(in, str))
-	{
-	}
-
-	in.close();
-
-	return false;
-}
-
 void runTest(bool (*testFunction)(), const string& testName)
 {
 	if (testFunction())
