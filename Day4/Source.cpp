@@ -26,23 +26,36 @@ struct Image {
 	int mx;
 	int my;
 	int* pixels;
+	
+	/*
+	Image(int tmx, int tmy)
+	{
+		mx = tmx;
+		my = tmy;
+		pixels = new int[mx * my + 1];
+	}
+	~Image()
+	{
+		delete pixels;
+	}
+	*/
 };
 
 void createImage(Image* img, int tmx, int tmy)
 {
 	img->mx = tmx;
 	img->my = tmy;
-	img->pixels = new int[tmy * tmx]{ 0 };
+	img->pixels = new int[(tmy * tmx)]{ 0 };
 }
 
 void setPointImage(Image* img, int x, int y, int color)
 {
-	img->pixels[(y - 1) * img->mx + x - 1] = color;
+	img->pixels[(y * img->mx + x)] = color;
 }
 
 int getPointImage(Image* img, int x, int y)
 {
-	return img->pixels[(y - 1) * img->mx + x - 1];
+	return img->pixels[y * img->mx + x];
 }
 
 void showImage(Image* img)
@@ -51,12 +64,13 @@ void showImage(Image* img)
 	{
 		for (int j = 0; j < img->mx; j++)
 		{
-			cout << img->pixels[i * img->mx + j] << " ";
+			cout << img->pixels[i * imt->mx + j] << " ";
 			//color output?
 		}
 		cout << endl;
 	}
 }
+
 /*
 void saveImage(Image* img, char& filename)
 {
@@ -88,7 +102,7 @@ bool testGetPointImage()
 	createImage(im, 2, 5);
 	im->pixels[9] = 255;
 
-	if (getPointImage(im, 2, 5) == 255 && getPointImage(im, 1, 4) == 0)
+	if (getPointImage(im, 1, 4) == 255 && getPointImage(im, 1, 2) == 0)
 		return true;
 
 	return false;
@@ -103,15 +117,14 @@ bool testSetPointImage()
 
 	if (getPointImage(im, 1, 3) == 127 && getPointImage(im, 2, 5) == 255)
 		return true;
-
+	
+	//пробовал писать delete
 	return false;
 }
 
-
-
 bool testSaveImage()
 {
-
+	//заглушка
 
 	return false;
 }
@@ -126,9 +139,14 @@ void runTest(bool (*testFunction)(), const string& testName)
 
 int main()
 {
-	Image* img_ptr = new Image;
 	runTest(testCreateImage, "CreateImage");
 	runTest(testGetPointImage, "GetPointImage");
 	runTest(testSetPointImage, "SetPointImage");
 
+	Image* img_ptr = new Image;
+	createImage(img_ptr, 3, 5);
+	setPointImage(img_ptr, 0, 0, 1);
+	setPointImage(img_ptr, 1, 1, 1);
+	setPointImage(img_ptr, 2, 2, 1);
+	showImage(img_ptr);
 }
