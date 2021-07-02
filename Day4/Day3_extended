@@ -24,6 +24,7 @@ struct Image {
 	int* pixels;
 };
 
+//image methods
 void createImage(Image* img, int tmx, int tmy)
 {
 	img->mx = tmx;
@@ -73,6 +74,7 @@ void saveImage(Image* img, const string filename)
 	out.close();
 }
 
+//ball methods
 void initList(DataList* root)
 {
 	root->t = 0;
@@ -101,7 +103,7 @@ DataList* simulate(double h, double v, double dt)
 {
 	DataList* output = new DataList;
 	initList(output);
-	
+
 
 	double a = g;
 	double apogee_t, touch_t, apogee_h;
@@ -115,13 +117,13 @@ DataList* simulate(double h, double v, double dt)
 
 		writeList(output, h, v, -g, 0);
 	}
-	else	
+	else
 	{
 		//мяч уже падает, считаем только время падения
 		apogee_t = 0;
 		apogee_h = h;
 		touch_t = (-abs(v) + sqrt(v * v + 2 * a * h)) / a;
-		
+
 
 		writeList(output, h, v, g, 0);
 	}
@@ -136,7 +138,7 @@ DataList* simulate(double h, double v, double dt)
 		ct += dt;
 	}
 	//обновляем параметры (тк в следующий момент dt шарик уже мог опуститься)
-	v = a * (ct - apogee_t); 
+	v = a * (ct - apogee_t);
 	h = apogee_h - a * (ct - apogee_t) * (ct - apogee_t) / 2;
 	writeList(output, h, -v, -g, ct);
 	ct += dt;
@@ -155,19 +157,20 @@ DataList* simulate(double h, double v, double dt)
 	return output;
 }
 
-void print(DataList* ls, double t)
+void parseList(DataList* ls, Image* im)
 {
-	cout << "Printing data sheet..." << endl;
-	cout << "Time\tHeight\tVelocity\tAcceleration" << endl;
+	const int t_scale = 60;
+	const double h_scale = 1.25;
 
 	DataList* cur_dl = ls;
-	while (cur_dl->next != NULL && cur_dl->t <= t)
+	while (cur_dl->next != NULL)
 	{
-		cout << fixed << showpoint;
-		cout << setprecision(2);
-		cout << (double)cur_dl->t << "\t" << cur_dl->h << "\t" << cur_dl->v << "\t\t" << cur_dl->a << endl;
+		setPointImage(im, t_scale * cur_dl->t, (im->my - 1) - h_scale * cur_dl->h, 1);
 		cur_dl = cur_dl->next;
 	}
+
+	saveImage(im, "simulation.pnm");
+	cout << "Image has been parsed and saved" << endl;
 }
 
 int main()
@@ -175,6 +178,7 @@ int main()
 	Image* img_ptr = new Image;
 	createImage(img_ptr, 1600, 900);
 	
-	showImage(img_ptr);
-	saveImage(img_ptr, "simulation.pnm");
+	DataList* out = simulate(5 * g, 10 * g, 0.01);
+	cout << "Please, wait until parsing complete..." << endl;
+	parseList(out, img_ptr); 
 }
