@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 /*
@@ -46,7 +48,7 @@ void createImage(Image* img, int tmx, int tmy)
 {
 	img->mx = tmx;
 	img->my = tmy;
-	img->pixels = new int[tmx * tmy]{ 0 };
+	img->pixels = new int[tmx * tmy]{ 1 };
 }
 
 void setPointImage(Image* img, int x, int y, int color)
@@ -71,19 +73,26 @@ void showImage(Image* img)
 		cout << endl;
 	}
 }
-/*
-void saveImage(Image* img, char& filename)
-{
-	FILE* out;
-	out = fopen_s(filename, "xz");	//color format?
-	fprintf(out, "P6\n");
-	fprintf(out, "%d %d\n", img->mx, img->my);
-	fprintf(out, "%d\n", 255);
-	fwrite(img->pixels, 3 * img->mx, img->my, out);
 
-	fclose(out);
+void saveImage(Image* img, const string filename)
+{
+	fstream out;
+	out.open(filename, fstream::out);
+	out << "P1" << endl;
+	out << img->mx << " " << img->my << endl;
+
+	for (int i = 0; i < img->my; i++)
+	{
+		for (int j = 0; j < img->mx; j++)
+		{
+			out << img->pixels[i * img->mx + j] << " ";
+		}
+		out << endl;
+	}
+
+	out.close();
 }
-*/
+
 
 bool testCreateImage()
 {
@@ -123,7 +132,15 @@ bool testSetPointImage()
 
 bool testSaveImage()
 {
+	fstream in;
+	in.open("hello_image.pnm");
 
+	string str;
+	while (getline(in, str))
+	{
+	}
+
+	in.close();
 
 	return false;
 }
@@ -148,4 +165,5 @@ int main()
 	setPointImage(img_ptr, 1, 1, 1);
 	setPointImage(img_ptr, 2, 2, 1);
 	showImage(img_ptr);
+	saveImage(img_ptr, "hello_image.pnm");
 }
