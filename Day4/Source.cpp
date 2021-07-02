@@ -65,7 +65,7 @@ void showImage(Image* img)
 	{
 		for (int j = 0; j < img->mx; j++)
 		{
-			cout << img->pixels[i * imt->mx + j] << " ";
+			cout << img->pixels[i * img->mx + j] << " ";
 			//color output?
 		}
 		cout << endl;
