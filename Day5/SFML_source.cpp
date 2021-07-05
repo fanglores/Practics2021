@@ -2,14 +2,18 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(800, 450), "SFML works!");
 
 	int i = 0;
+	int x = 100, y = 50;
+
 
 	while (window.isOpen())
 	{
-		sf::CircleShape shape(100.f + i);
-		shape.setFillColor(sf::Color::Green);
+		sf::RectangleShape rect(sf::Vector2f(x, y));
+		rect.setFillColor(sf::Color::Green);
+		rect.setPosition(2*x, 2*y);
+		rect.rotate(i);
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -20,14 +24,13 @@ int main()
 
 		window.clear();
 
-		window.draw(shape);
+		window.draw(rect);
 
 		window.display();
 
 		i++;
 
-		if (i == 200)
-			i = 0;
+		if (i == 360) i = 0;
 	}
 
 	return 0;
